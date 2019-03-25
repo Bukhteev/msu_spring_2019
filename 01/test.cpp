@@ -20,22 +20,30 @@ int search(int const * Data, int value, int left, int right) {
                 return search(Data, value, middle + 1, right);
 }
 
-size_t post_search(int const * Data, size_t idx, int value) {
-        while (Data[idx - 1] == value)
+size_t post_search(int const * Data, size_t idx, int value, const char*  what) {
+
+        if (what == "left"){
+            while (Data[idx - 1] == value)
                 --idx;
-        return idx;
+            return idx;
+        }
+        if(what == "right"){
+            while (Data[idx + 1] == value)
+                ++idx;
+            return idx;
+        }
+        else{
+            return 0;
+        }
 }
 
-
-
-
-
 bool prime (int n){
-	
-	if (n == 1) 
-		return false;
-	
-    for (int i = 2; i <= sqrt(n); i++){
+
+    if (n == 1) 
+        return false;
+
+    int end = sqrt(n);
+    for (int i = 2; i <= end; i++){
         if (n%i == 0)
             return false;
         
@@ -45,32 +53,29 @@ bool prime (int n){
 }
 
 int counter(int left, int right, const int*  Data, size_t size){
-	int count = 0;
-	int left_index = post_search(Data, search(Data, left, 0, size - 1), left);
-    int right_index = post_search(Data, search(Data, right, 0, size - 1), right);
-	
-	for (int i = left_index; i < right_index+1; i++){
+    int count = 0;
+    int left_index = post_search(Data, search(Data, left, 0, size - 1), left, "left");
+    int right_index = post_search(Data, search(Data, right, 0, size - 1), right, "right");
 
-		if(prime(Data[i]))
-			count ++;
-	}
+    for (int i = left_index; i < right_index+1; i++){
+        if(prime(Data[i]))
+            count ++;
+    }
 
-	return count;
+    return count;
 }
 
 int main(int argc, char* argv[])
 {
     if (!(argc % 2) || (argc == 1)) 
-		return -1;
-	
+        return -1;
 
-	
-	for (int i = 1; i < argc; i += 2) {
-		int left = std::atoi(argv[i]);
-		int right = std::atoi(argv[i + 1]);
-		std::cout << counter(left, right, Data, Size) << std::endl;
-		
-	}
+    for (int i = 1; i < argc; i += 2) {
+        int left = std::atoi(argv[i]);
+        int right = std::atoi(argv[i + 1]);
+        std::cout << counter(left, right, Data, Size) << std::endl;
 
-	return 0;
+    }
+
+    return 0;
 }
