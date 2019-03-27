@@ -4,6 +4,10 @@
 #include "numbers.dat"
 
 
+enum HOW {
+	LEFT,
+	RIGHT
+};
 //find index
 int search(int const * Data, int value, int left, int right) {
         int middle = (left + right) / 2;
@@ -20,22 +24,21 @@ int search(int const * Data, int value, int left, int right) {
                 return search(Data, value, middle + 1, right);
 }
 
-size_t post_search(int const * Data, size_t idx, int value, const char*  what) {
+size_t post_search(int const * Data, size_t idx, int value, HOW what) 
+{
 
-        if (what == "left"){
-            while (Data[idx - 1] == value)
-                --idx;
-            return idx;
-        }
-        if(what == "right"){
-            while (Data[idx + 1] == value)
-                ++idx;
-            return idx;
-        }
-        else{
-            return 0;
-        }
-}
+        switch(what){
+            case LEFT:
+                while (Data[idx - 1] == value)
+                    --idx;
+                return idx;
+
+            case RIGHT:
+                while (Data[idx + 1] == value)
+                    ++idx;
+                return idx;
+            }
+ }
 
 bool prime (int n){
 
@@ -54,8 +57,8 @@ bool prime (int n){
 
 int counter(int left, int right, const int*  Data, size_t size){
     int count = 0;
-    int left_index = post_search(Data, search(Data, left, 0, size - 1), left, "left");
-    int right_index = post_search(Data, search(Data, right, 0, size - 1), right, "right");
+    int left_index = post_search(Data, search(Data, left, 0, size - 1), left, LEFT);
+    int right_index = post_search(Data, search(Data, right, 0, size - 1), right, RIGHT);
 
     for (int i = left_index; i < right_index+1; i++){
         if(prime(Data[i]))
