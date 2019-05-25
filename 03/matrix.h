@@ -50,7 +50,7 @@ public:
 			return data[i];
 		} 
 
-		int operator[](size_t i) const
+		int const operator[](size_t i) const
 		{
 			if(i >= size){
 				throw std::out_of_range("");
@@ -71,7 +71,7 @@ public:
 			return Array(&data[cols * i], cols);
 	}
 
-	Array operator[](size_t i) const
+	Array const operator[](size_t i) const
 	{
 		if(i >= rows){
 				throw std::out_of_range("");
