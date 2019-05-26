@@ -71,7 +71,7 @@ public:
 			return Array(&data[cols * i], cols);
 	}
 
-	Array const operator[](size_t i) const
+	const Array operator[](size_t i) const
 	{
 		if(i >= rows){
 				throw std::out_of_range("");
