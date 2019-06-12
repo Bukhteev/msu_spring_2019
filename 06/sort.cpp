@@ -90,14 +90,12 @@ int main(int argc, char* argv[]) {
     }
 
     fs::create_directories("data");
-    auto file = argv[1];
-    auto outputFile = argv[2];
     std::thread t1(my_sort, argv[1], "one_", 1);
-    std::thread t2(my_sort, file, "two_", 2);
+    std::thread t2(my_sort, argv[1], "two_", 2);
 
     t1.join();
     t2.join();
-    merge_file("data/one_output.bin", "data/two_output.bin", outputFile);
+    merge_file("data/one_output.bin", "data/two_output.bin", argv[2]);
 
     fs::remove_all("data");
     return 0;
