@@ -12,7 +12,7 @@
 namespace fs = std::experimental::filesystem;
 
 std::mutex mutex;
-size_t batch_size = 10000;      
+size_t batch_size = 40000;      
 
  //Будем сортировать методом слияния файлы. Воспользуемся методом merge из stl 
 void merge_file(const std::string f1, const std::string f2, const std::string f_out ){
@@ -90,7 +90,7 @@ int main(int argc, char* argv[]) {
     }
 
     fs::create_directories("data");
-    std::thread t1(my_sort, argv[1], "one_", 1);
+    std::thread t1(my_sort, "in2.bin", "one_", 1);
     std::thread t2(my_sort, argv[1], "two_", 2);
 
     t1.join();
