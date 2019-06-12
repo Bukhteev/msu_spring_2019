@@ -9,7 +9,6 @@
 #include <experimental/filesystem>
 #include <condition_variable>
 
-
 namespace fs = std::experimental::filesystem;
 
 std::mutex mutex;
@@ -42,7 +41,7 @@ void my_sort(const char* file, const std::string& prefix, size_t num) {
     if (num == 1 ){
         last = 1;
         start =1;
-        }
+    }
 
 //считываем файл по по кусочкам, сортируем их и сразу же записываем в файл для дальнейшей сортировки слиянием
     while(!feof(fp)) {
@@ -58,13 +57,10 @@ void my_sort(const char* file, const std::string& prefix, size_t num) {
             else
                 continue;
         }
-
-        last += 2;
+    last += 2;
     }
+ 
     fclose(fp);
-
-
-
 
     std::string file_1 = "data/" + prefix + std::to_string(start) + ".bin";
     std::string file_2;
