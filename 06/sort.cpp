@@ -43,8 +43,8 @@ void my_sort(const char* file, const std::string& prefix, size_t num) {
         last = 1;
         start =1;
         }
-        
-//считываем файл по по кусочкам, чуть меньше 8 mb, сортируем их и сразу же записываем в файл для дальнейшей сортировки слиянием
+
+//считываем файл по по кусочкам, сортируем их и сразу же записываем в файл для дальнейшей сортировки слиянием
     while(!feof(fp)) {
         
         fseek(fp,  sizeof(uint64_t) * batch_size * last, SEEK_SET);
