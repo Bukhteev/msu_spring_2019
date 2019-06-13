@@ -16,6 +16,7 @@ size_t batch_size = 40000;
 
  //Будем сортировать методом слияния файлы. Воспользуемся методом merge из stl 
 void merge_file(const std::string f1, const std::string f2, const std::string f_out ){
+    
     std::ifstream f1_op(f1, std::ios::binary );
     std::ifstream f2_op(f2, std::ios::binary );
     std::ofstream mergeFile(f_out, std::ios::binary );
@@ -24,29 +25,30 @@ void merge_file(const std::string f1, const std::string f2, const std::string f_
                std::istream_iterator<uint64_t>(f2_op),
                std::istream_iterator<uint64_t>(),
                std::ostream_iterator<uint64_t>(mergeFile, " "));
-   return;
+    return;
 }
 
 void my_sort(const char* file, const std::string& prefix, size_t num) {
-    std::vector<uint64_t> vec(batch_size);
     
+    std::vector<uint64_t> vec(batch_size);
     FILE *fp;
+    
     if ((fp = fopen(file, "rb")) == NULL) {
         std::cout << "Cannot open file." << std::endl;
         return;
     }
-
-    int last = 0;
+//создадим переменные, для регулирования потоков. Один поток будет записывать четные файлы, другой нечетные
+    int last  = 0;
     int start = 0;
     if (num == 1 ){
         last = 1;
-        start =1;
+        start = 1;
     }
 
 //считываем файл по по кусочкам, сортируем их и сразу же записываем в файл для дальнейшей сортировки слиянием
     while(!feof(fp)) {
         
-        fseek(fp,  sizeof(uint64_t) * batch_size * last, SEEK_SET);
+        fseek(fp,  sizeof(uint64_t) * batch_size * last, SEEK_SET);//сдвигаемся в область памяти при каждой итерации.
         fread(vec.data(), sizeof(uint64_t), batch_size, fp);
         std::sort(begin(vec), end(vec));
         std::ofstream out("data/" + prefix + std::to_string(last) + ".bin",
@@ -65,6 +67,7 @@ void my_sort(const char* file, const std::string& prefix, size_t num) {
     std::string file_1 = "data/" + prefix + std::to_string(start) + ".bin";
     std::string file_2;
     std::string file_3;
+
     while (start < last - 1){
         
         file_2 = "data/" + prefix + std::to_string(start + 2) + ".bin";
@@ -90,7 +93,7 @@ int main(int argc, char* argv[]) {
     }
 
     fs::create_directories("data");
-    std::thread t1(my_sort, "in2.bin", "one_", 1);
+    std::thread t1(my_sort, argv[1], "one_", 1);
     std::thread t2(my_sort, argv[1], "two_", 2);
 
     t1.join();
